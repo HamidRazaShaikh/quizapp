@@ -1,0 +1,20 @@
+
+
+Typescript react - Could not find a declaration file for module ''react-materialize'. 'path/to/module-name.js' implicitly has an any type
+
+*********************************************************************************************************************************
+For those who wanted to know that how did I overcome this . I did a hack kind of stuff .
+
+Inside my project I created a folder called @Types and added it to tsconfig.json for find all required types from it . So it looks somewhat like this -
+
+  "typeRoots": [
+            "../node_modules/@types",
+            "../@types"
+        ]
+And inside that I created a file called alltypes.d.ts . To find the unknown types from it . so for me these were the unknown types and I added it over there.
+
+declare module 'react-materialize';
+declare module 'react-router';
+declare module 'flux';
+So now the typescript didn't complain about the types not found anymore . :) win win situation now 
+************************************************************************************************************************
