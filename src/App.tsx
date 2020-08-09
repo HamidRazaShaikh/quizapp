@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import React , { useState} from 'react';
+
 
 import NavbarQuizApp from './components/nav';
 import UserInfo from './components/userInfo';
@@ -13,18 +8,15 @@ import QuestionCard from './components/questioncard'
 
 
 
-function App() {
+const App = () => {
+  const [registered , setRegistered] = useState(false);
+  const [user , setUser] = useState({})
   return (
     <div>
       <NavbarQuizApp/>
+      {!registered? (<UserInfo setRegistered = {setRegistered} setUser = {setUser}/>) : (<QuestionCard userData = {user}/>)}
 
-      <Router>
-        <Switch>
-          <Route exact path = '/' component = {UserInfo}/>
-          <Route path = '/questionCard/:name?/:subject?/:level?' component = {QuestionCard}/>
-          <Route path = '*'  component = {NotFound} />
-        </Switch>
-      </Router>
+
       
 
     </div>

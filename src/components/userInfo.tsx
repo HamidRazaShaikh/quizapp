@@ -1,21 +1,56 @@
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
-import {Link} from 'react-router-dom';
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import { subjectNames } from "./../services/api";
 
-import { Button, Form, FormGroup, Label, Input} from "reactstrap";
-import QuestionCard from './questioncard';
+type Props = {
+  setRegistered: Function;
+  setUser: Function;
+};
 
-export default function UserInfo() {
+type categoryType = {
+  id: number;
+  name: string;
+};
 
-  const [name , setName] = useState('');
-  const [subject , setSubject] = useState('');
-  const [level , setLevel] = useState('');
+const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
+  useEffect(() => {
+    const catagoriesList = async () => {
+      setCategories(await subjectNames());
+    };
+
+    catagoriesList();
+  }, []);
+
+  const [values, setValues] = useState({
+    name: "",
+    category: "General Knowledge",
+    level: "Easy",
+  });
+
+  const [categoires, setCategories] = useState<any[]>([]);
+
+  const handleChange = (e: any) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = ( e : any) => {
+    e.preventDefault();
+    if(values.name){
+      setRegistered(true);
+      setUser(values)
+    }
+    else{
+      alert('Please enter your name.')
+    }
 
 
-  // const setData = () => {
 
-  //   setName ()
-  // }
+  }
+
   return (
     <Container className="container-fluid">
       <Row>
@@ -24,41 +59,45 @@ export default function UserInfo() {
         </Col>
       </Row>
       <Row>
-        <Col xs = '12' lg = '6'>
-          <Form>
+        <Col xs="12" lg="6">
+          <Form onSubmit = {handleSubmit}>
             <FormGroup>
               <Label>Name</Label>
               <Input
-                name="name"            
+                name="name"
+                type="text"
                 placeholder="Enter your name"
-                value = {name}
-                onChange = {(e)=> setName(e.target.value)}
-            
+                onChange={handleChange}
               />
             </FormGroup>
             <FormGroup>
-              <Label >subject</Label>
-              <Input
-                name="subject"
-                placeholder="Enter subject"
-                value = {subject}
-                onChange = {(e)=> setSubject(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label >level</Label>
-              <Input type = 'select' name="select" value = {level}
-                onChange = {(e)=> setLevel(e.target.value)}>
-                <option>Hard</option>
-                <option>Medium</option>
-                <option>Easy</option>
+              <Label>category</Label>
+              <Input type="select" name="category" onChange={handleChange}>
+                {categoires.map((cat: categoryType, i) => {
+                  console.log(cat);
+                  return (
+                    <option key={i} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  );
+                })}
               </Input>
             </FormGroup>
-            
-<Link style = {{ color : 'white' ,textDecoration : 'none'}} to ={`/questionCard/${name}/${subject}/${level}`}><Button  className = 'd-flex align-items-center'>start quiz</Button></Link>
+            <FormGroup>
+              <Label>level</Label>
+              <Input type="select" name="level" onChange={handleChange}>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </Input>
+            </FormGroup>
+
+            <Button type = 'submit' className="d-flex align-items-center">start quiz</Button>
           </Form>
         </Col>
       </Row>
     </Container>
   );
-}
+};
+
+export default UserInfo;
