@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { Container, Row, Col } from "reactstrap";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { subjectNames } from "./../services/api";
+import NotFound from './notfound';
+import AlertMessage from './alert'
 
 type Props = {
   setRegistered: Function;
@@ -29,6 +31,7 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
   });
 
   const [categoires, setCategories] = useState<any[]>([]);
+  const [alert,setAlert] = useState<boolean>(false)
 
   const handleChange = (e: any) => {
     setValues({
@@ -43,12 +46,16 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
       setRegistered(true);
       setUser(values)
     }
-    else{
-      alert('Please enter your name.')
-    }
+    else{  
+      setAlert(true)
+      }
 
 
 
+  }
+
+  if( !categoires){
+    return <NotFound/>
   }
 
   return (
@@ -68,13 +75,15 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
                 type="text"
                 placeholder="Enter your name"
                 onChange={handleChange}
+                autoFocus
+                onClick = { ()=> setAlert(false)}
               />
+              {alert ? <AlertMessage/> : null}
             </FormGroup>
             <FormGroup>
               <Label>category</Label>
               <Input type="select" name="category" onChange={handleChange}>
                 {categoires.map((cat: categoryType, i) => {
-                  console.log(cat);
                   return (
                     <option key={i} value={cat.name}>
                       {cat.name}
