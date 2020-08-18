@@ -1,9 +1,9 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { subjectNames } from "./../services/api";
-import NotFound from './notfound';
-import AlertMessage from './alert'
+import NotFound from "./notfound";
+import AlertMessage from "./alert";
 
 type Props = {
   setRegistered: Function;
@@ -26,12 +26,18 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
 
   const [values, setValues] = useState({
     name: "",
-    category: "General Knowledge",
-    level: "Easy",
+    category: 9,
+    level: "easy",
+    sub: "",
   });
 
   const [categoires, setCategories] = useState<any[]>([]);
-  const [alert,setAlert] = useState<boolean>(false)
+  const [alert, setAlert] = useState<boolean>(false);
+
+  const subj = categoires.filter((cat) => values.category == cat.id);
+  subj.map((v) => {
+    values.sub = v.name;
+  });
 
   const handleChange = (e: any) => {
     setValues({
@@ -40,22 +46,18 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
     });
   };
 
-  const handleSubmit = ( e : any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    if(values.name){
+    if (values.name) {
       setRegistered(true);
-      setUser(values)
+      setUser(values);
+    } else {
+      setAlert(true);
     }
-    else{  
-      setAlert(true)
-      }
+  };
 
-
-
-  }
-
-  if( !categoires){
-    return <NotFound/>
+  if (!categoires) {
+    return <NotFound />;
   }
 
   return (
@@ -67,7 +69,7 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
       </Row>
       <Row>
         <Col xs="12" lg="6">
-          <Form onSubmit = {handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label>Name</Label>
               <Input
@@ -76,16 +78,16 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
                 placeholder="Enter your name"
                 onChange={handleChange}
                 autoFocus
-                onClick = { ()=> setAlert(false)}
+                onClick={() => setAlert(false)}
               />
-              {alert ? <AlertMessage/> : null}
+              {alert ? <AlertMessage /> : null}
             </FormGroup>
             <FormGroup>
               <Label>category</Label>
               <Input type="select" name="category" onChange={handleChange}>
                 {categoires.map((cat: categoryType, i) => {
                   return (
-                    <option key={i} value={cat.name}>
+                    <option key={i} value={cat.id}>
                       {cat.name}
                     </option>
                   );
@@ -95,13 +97,15 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
             <FormGroup>
               <Label>level</Label>
               <Input type="select" name="level" onChange={handleChange}>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
               </Input>
             </FormGroup>
 
-            <Button type = 'submit' className="d-flex align-items-center">start quiz</Button>
+            <Button type="submit" className="d-flex align-items-center">
+              submit
+            </Button>
           </Form>
         </Col>
       </Row>
