@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Button, Container, Row, Col } from "reactstrap";
 import { QuestionFetch, QuestionStates } from "./../services/api";
-import { Card, CardTitle, CardText, Label, Input } from "reactstrap";
+import { Card,Label, Input } from "reactstrap";
 import NotFound from "./notfound";
+import { Spinner } from 'reactstrap';
+
+
+
 
 type Props = {
   userData: any;
@@ -18,7 +22,11 @@ const QuestionCard: React.FC<Props> = ({ setRegistered, userData }) => {
   const [selection, setSelection] = useState<string>("");
   const [scroe, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [loading ,  setLoading] = useState<boolean>(false)
   const startQuiz = async () => {
+    setLoading(true)
+
+
     const newQuestion = await QuestionFetch(
       number,
       userData.level,
@@ -26,6 +34,7 @@ const QuestionCard: React.FC<Props> = ({ setRegistered, userData }) => {
     );
     setQuestion(newQuestion);
     setShowQuestion(true);
+    setLoading(false)
   };
 
   const handleChange = (e: any) => {
@@ -51,7 +60,15 @@ const QuestionCard: React.FC<Props> = ({ setRegistered, userData }) => {
     return <NotFound />;
   }
 
+  // ************spinner*****************
+
+  if (loading){
+    return    <Container  style = {{marginTop : 300}} className="d-flex justify-content-center"><Spinner style={{ width: '3rem', height: '3rem' }} color="secondary" /></Container>   
+
+  }
+
   return (
+    
     <Container>
       <Row>
         <Col style={{ textAlign: "center" }}>
@@ -81,7 +98,6 @@ const QuestionCard: React.FC<Props> = ({ setRegistered, userData }) => {
             <Card body>
               <h5>Question # {qnumber + 1}</h5>
               <h6>{question[qnumber].question}</h6>
-              {console.log(question[qnumber].options)}
               {question[qnumber].options.map((opt: string, index: number) => (
                 <Label style={{ marginLeft: 20 }} key={index}>
                   <Input

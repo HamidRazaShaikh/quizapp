@@ -5,6 +5,8 @@ import NavbarQuizApp from './components/nav';
 import UserInfo from './components/userInfo';
 import QuestionCard from './components/questioncard'
 
+// ************tow page application setup*****************
+
 
 
 const App = () => {

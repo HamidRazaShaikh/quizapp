@@ -5,6 +5,7 @@ import { subjectNames } from "./../services/api";
 import NotFound from "./notfound";
 import AlertMessage from "./alert";
 
+
 type Props = {
   setRegistered: Function;
   setUser: Function;
@@ -34,10 +35,14 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
   const [categoires, setCategories] = useState<any[]>([]);
   const [alert, setAlert] = useState<boolean>(false);
 
-  const subj = categoires.filter((cat) => values.category == cat.id);
-  subj.map((v) => {
-    values.sub = v.name;
-  });
+
+  // ************mapping categories*****************
+
+
+  if (categoires){
+    const subj = categoires.filter((cat) => values.category === cat.id);
+    subj.map((v) => values.sub = v.name);
+  } 
 
   const handleChange = (e: any) => {
     setValues({
@@ -45,6 +50,9 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
       [e.target.name]: e.target.value,
     });
   };
+
+
+  // ************call back funcion for app.js registerd and userdata*****************
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
