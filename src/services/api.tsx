@@ -1,8 +1,9 @@
-import {shuffle} from './../utilities';
-
-let array: string[] = ['hamid', 'rashid' , 'shakeel'];
-
-console.log(shuffle(array))
+const shuffle = (array: any[]) => {
+  return(
+    [...array].sort(() => Math.random() - 0.5)
+  )
+  
+};
 
 
 
@@ -24,7 +25,6 @@ export const QuestionFetch = async (
   level: string,
   category: any
 ) => {
-  console.log(number, level, category);
   const url = `https://opentdb.com/api.php?amount=${number}&category=${category}&difficulty=${level}&type=multiple`;
 
   try {
@@ -49,7 +49,6 @@ export type Question = {
   difficulty: string;
   incorrect_answers: string[];
   question: string;
-
 };
 
-export type QuestionStates = Question & { options : string[]};
+export type QuestionStates = Question & { options: any[] };
