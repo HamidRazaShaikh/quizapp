@@ -40,7 +40,7 @@ const UserInfo: React.FC<Props> = ({ setRegistered, setUser }) => {
 
 
   if (categoires){
-    const subj = categoires.filter((cat) => values.category === cat.id);
+    const subj = categoires.filter((cat) => values.category == cat.id);
     subj.map((v) => values.sub = v.name);
   } 
 
